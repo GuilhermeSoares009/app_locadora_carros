@@ -2,13 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{
-    CarroController,
-    ClienteController,
-    LocacaoController,
-    MarcaController,
-    ModeloController
-};
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::apiResource('cliente', ClienteController::class);
-Route::apiResource('Carro', CarroController::class);
-Route::apiResource('Locacao', LocacaoController::class);
-Route::apiResource('Marca', MarcaController::class);
-Route::apiResource('Modelo', ModeloController::class);
+Route::apiResource('cliente', 'ClienteController');
+Route::apiResource('carro', 'CarroController');
+Route::apiResource('locacao', 'LocacaoController');
+Route::apiResource('marca', 'MarcaController');
+Route::apiResource('modelo', 'ModeloController');
