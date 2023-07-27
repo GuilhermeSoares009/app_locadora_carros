@@ -20,7 +20,7 @@ class MarcaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $marcas =$this->marca->with('modelos')->get();
         return response()->json($marcas, 200);
