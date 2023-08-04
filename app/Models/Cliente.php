@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['nome'];
+
+    public function FunctionName() {
+        return [
+            'nome' => 'required'
+        ];
+    }
+
+    public function rules() {
+        return [
+            'nome'=>'required'
+        ];
+    }
 }

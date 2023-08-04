@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Modelo;
+use App\Repositories\ModeloRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,30 +23,24 @@ class ModeloController extends Controller
      */
     public function index(Request $request)
     {
-        $modelos = array();
+        $ModeloRepository = new ModeloRepository($this->modelo);
 
         if($request->has('atributos_marca')){
-            $atributos_marca = $request->atributos_marca;
-            $modelos = $this->modelo->with('marca:id,'.$atributos_marca);
+            $atributos_marca = 'marca:id,'.$request->atributos_marca;
+            $ModeloRepository->selectAtributoRegistrosRelacionados($atributos_marca);
         }else{
-            $modelos = $this->modelo->with('marca');
+            $ModeloRepository->selectAtributoRegistrosRelacionados('marca');
         }
-
+        
         if($request->has('filtro')){
-            $filtros = explode(';', $request->filtro);
-            foreach ($filtros as $key => $condicoes) {
-                $condicao = explode(':',$condicoes);
-                $modelos = $modelos->where($condicao[0],$condicao[1],$condicao[2]);
-            }
+           $ModeloRepository->filtro($request->filtro);
         }
 
         if($request->has('atributos')){
-            $atributos = $request->atributos;
-            $modelos = $modelos->selectRaw($atributos)->get();
-        }else{
-            $modelos = $modelos->get();
+            $ModeloRepository->selectAtributos($request->atributos);
         }
-        return response()->json($modelos, 200);
+
+        return response()->json($ModeloRepository->getResultado(), 200);
     }
 
 
@@ -130,16 +125,6 @@ class ModeloController extends Controller
         $modelo->fill($request->all());
         $modelo->imagem = $imagem_urn;
         $modelo->save();
-/* 
-        $modelo->update([
-            'marca_id' => $request->marca_id,
-            'nome' => $request->nome,
-            'imagem' => $imagem_urn,
-            'numero_portas' => $request->numero_portas,
-            'lugares' => $request->lugares,
-            'air_bag' => $request->air_bag,
-            'abs' => $request->abs
-        ]); */
         return response()->json($modelo,200);
     }
 
