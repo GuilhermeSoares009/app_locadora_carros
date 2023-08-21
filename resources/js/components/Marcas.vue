@@ -83,7 +83,8 @@
                     class="form-control"
                     id="novoNome"
                     aria-describedby="novoNomeHelp"
-                    placeholder="Nome da Marca"/>
+                    placeholder="Nome da Marca"
+                    v-model="nomeMarca"/>
                 </input-container-component>
             </div>
             <div class="form-group">
@@ -94,7 +95,8 @@
                     class="form-control-file"
                     id="novoImagem"
                     aria-describedby="novoImagemHelp"
-                    placeholder="Selecione uma imagem no formato PNG"/>
+                    placeholder="Selecione uma imagem no formato PNG"
+                    @change="carregarImagem($event)"/>
                 </input-container-component>
             </div>
         </template>
@@ -103,12 +105,46 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">
                 Fechar
             </button>
-          <button type="button" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
         </template>
     </modal-component>
   </div>
 </template>
 
 <script>
-export default {};
+
+export default {
+    data() {
+        return {
+            urlBase: 'http://127.0.0.1:8000/api/v1/marca',
+            nomeMarca: '',
+            arquivoImagem: []
+        }
+    },
+    methods: {
+        carregarImagem(e) {
+            this.arquivoImagem = e.target.files;
+        },
+        salvar()
+        {
+            let formData = new FormData();
+            formData.append('nome', this.nomeMarca);
+            formData.append('imagem', this.arquivoImagem[0]);
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json'
+                }
+            };
+
+            axios.post(this.urlBase, formData, config)
+                .then( response => {
+                    console.log(response)
+                })
+                .catch(errors => {
+                    console.log(errors)
+                });
+        }
+    }
+};
 </script>
