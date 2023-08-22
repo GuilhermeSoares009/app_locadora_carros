@@ -117,6 +117,7 @@
           <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
         </template>
     </modal-component>
+
   </div>
 </template>
 
@@ -140,10 +141,20 @@ export default {
             nomeMarca: '',
             arquivoImagem: [],
             transacaoStatus: '',
-            transacaoDetalhes: []
+            transacaoDetalhes: [],
+            marcas: []
         }
     },
     methods: {
+        carregarLista(){
+            axios.get(this.urlBase)
+            .then(response => {
+              this.marcas = response.data
+            })
+            .catch( errors => {
+
+            });
+        },
         carregarImagem(e) {
             this.arquivoImagem = e.target.files;
         },
@@ -177,6 +188,9 @@ export default {
                     //console.log(errors)
                 });
         }
+    },
+    mounted(){
+      this.carregarLista()
     }
 };
 </script>
