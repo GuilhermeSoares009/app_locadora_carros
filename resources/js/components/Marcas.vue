@@ -114,6 +114,17 @@
 <script>
 
 export default {
+    computed: {
+        token(){
+            let token = document.cookie.split(';').find(indice => {
+              return indice.includes('token=');
+            });
+            token = token.split('=')[1];
+            token = 'Bearer ' + token;
+
+            return token;
+        }
+    },
     data() {
         return {
             urlBase: 'http://127.0.0.1:8000/api/v1/marca',
@@ -133,13 +144,14 @@ export default {
             let config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'Authorizathion': this.token
                 }
             };
 
             axios.post(this.urlBase, formData, config)
                 .then( response => {
-                    console.log(response)
+                    //console.log(response)
                 })
                 .catch(errors => {
                     console.log(errors)
