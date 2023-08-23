@@ -53,7 +53,15 @@
         <!-- Início card de listagem de marcas -->
         <card-component titulo="Relação de Marcas">
           <template v-slot:conteudo>
-            <table-component :dados="marcas" :titulos="['id','nome','imagem']"/>
+            <table-component 
+              :dados="marcas" 
+              :titulos="{
+                id: {titulo:'ID', tipo: 'texto'},
+                nome: {titulo:'Nome', tipo: 'texto'},
+                imagem: {titulo:'Imagem', tipo: 'imagem'},
+                created_at: {titulo:'Data de criação', tipo: 'data'}
+              }"
+            />
           </template>
           <template v-slot:rodape>
             <button
@@ -184,7 +192,6 @@ export default {
                     this.transacaoDetalhes = {
                       mensagem: 'ID do registro: ' + detalhes.data.id
                     };
-                    console.log(response)
                 })
                 .catch(errors => {
                     this.transacaoStatus = 'erro';
@@ -192,7 +199,6 @@ export default {
                       mensagem: errors.response.data.message,
                       dados: errors.response.data.errors
                     }
-                    //console.log(errors)
                 });
         }
     },
