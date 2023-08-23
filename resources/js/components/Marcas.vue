@@ -64,14 +64,29 @@
             />
           </template>
           <template v-slot:rodape>
-            <button
-              type="button"
-              class="btn btn-primary btn-sm float-right"
-              data-toggle="modal"
-              data-target="#modalMarca"
-            >
-              Adicionar
-            </button>
+             <div class="row">
+                <div class="col-10">
+                  <paginate-component>
+                      <li 
+                      v-for="l, key in marcas.links" 
+                      :key="key" 
+                      :class="l.active ? 'page-item active': 'page-item'" 
+                      @click="paginacao(l)">
+                        <a class="page-link"
+                         v-html="l.label"></a>
+                      </li>
+                  </paginate-component>
+                </div>
+                <div class="col">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm float-right"
+                    data-toggle="modal"
+                    data-target="#modalMarca"                >
+                    Adicionar
+                  </button>
+                </div>
+             </div>
           </template>
         </card-component>
         <!-- fim card de listagem de marcas -->
@@ -150,10 +165,16 @@ export default {
             arquivoImagem: [],
             transacaoStatus: '',
             transacaoDetalhes: [],
-            marcas: []
+            marcas: {data: []}
         }
     },
     methods: {
+        paginacao(l) {
+          if(l.url){
+            this.urlBase = l.url;
+            this.carregarLista();
+          }
+        },
         carregarLista(){
             let config = {
                 headers: {
