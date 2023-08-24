@@ -215,7 +215,6 @@ export default {
         },
         carregarLista(){
             let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
-            console.log(url);
             let config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',

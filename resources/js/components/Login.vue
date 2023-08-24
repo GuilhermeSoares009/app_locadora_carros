@@ -77,7 +77,6 @@
                 fetch(url, configuracao)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(this.email, this.password)
                         if(data.token)
                         {
                             document.cookie = 'token=' +data.token+';SameSite=Lax'
