@@ -57,7 +57,7 @@
           <template v-slot:conteudo>
             <table-component 
               :dados="marcas.data" 
-              :visualizar="{visivel: true, dataToggle: '', dataTarget: '#modalMarcaVisualizar'}"
+              :visualizar="{visivel: true, dataToggle: 'modal', dataTarget: '#modalMarcaVisualizar'}"
               :atualizar="true"
               :remover="true"
               :titulos="{
