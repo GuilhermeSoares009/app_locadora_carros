@@ -109,7 +109,7 @@ class MarcaController extends Controller
 
         $marca->fill($request->all());
 
-        if($request->file('iamgem')){
+        if($request->file('imagem')){
             Storage::disk('public')->delete($marca->imagem);
 
             $imagem = $request->file('imagem');
