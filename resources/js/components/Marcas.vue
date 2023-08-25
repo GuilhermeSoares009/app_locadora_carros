@@ -261,12 +261,14 @@ export default {
         }
     },
     methods: {
-      atualizar(){
-        
+      atualizar(){        
         let formData = new FormData();
         formData.append('_method', 'patch');
         formData.append('nome', this.$store.state.item.nome);
-        formData.append('imagem', this.arquivoImagem[0]);
+
+        if(this.arquivoImagem){
+          formData.append('imagem', this.arquivoImagem[0]);
+        }
 
         let config = {
           headers: {
@@ -282,6 +284,7 @@ export default {
         axios.post(url,formData,config)
           .then(response => {
             console.log(response);
+            atualizarImagem.value = '';
 /*             this.$store.state.transacao.status  = 'sucesso'
             this.$store.state.transacao.mensagem  = response.data.msg*/
             this.carregarLista(); 
