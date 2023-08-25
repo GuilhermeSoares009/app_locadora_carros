@@ -3,7 +3,7 @@
        {{titulo}}
        <hr>
        <p> {{detalhes.mensagem}} </p>
-       <span v-if="detalhes.data.id">  {{'ID do registro: ' + detalhes.data.id}} </span>
+       <span v-if="detalhes.data && detalhes.data.id">  {{'ID do registro: ' + detalhes.data.id}} </span>
        <ul v-if="detalhes.data">
             <li v-for="e,key in detalhes.dados" :key="key">{{ e[0] }}</li>
        </ul>
