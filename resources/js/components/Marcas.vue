@@ -179,8 +179,8 @@
           <modal-component id="modalMarcaRemover" titulo="Remover Marca">
 
             <template v-slot:alertas>
-              <alert-component tipo="success" titulo="Transação realizada com sucesso" :detalhes="{mensagem: $store.state.transacao.mensagem}" v-if="$store.state.transacao.status == 'sucesso'"></alert-component>
-              <alert-component tipo="danger" titulo="Erro na transação com sucesso" :detalhes="{mensagem:$store.state.transacao.mensagem}" v-if="$store.state.transacao.status == 'erro'"></alert-component>
+              <alert-component tipo="success" titulo="Transação realizada com sucesso" :detalhes="$store.state.transacao" v-if="$store.state.transacao.status == 'sucesso'"></alert-component>
+              <alert-component tipo="danger" titulo="Erro na transação" :detalhes="$store.state.transacao" v-if="$store.state.transacao.status == 'erro'"></alert-component>
             </template>
 
             <template v-slot:conteudo v-if="$store.state.transacao.status != 'sucesso'">
@@ -201,10 +201,12 @@
         <!-- fim do modal de remoção de marca -->
 
 
-        <!-- início do modal de remoção de marca -->
+        <!-- início do modal de atualização de marca -->
           <modal-component id="modalMarcaAtualizar" titulo="Atualizar Marca">
 
             <template v-slot:alertas>
+              <alert-component tipo="success" titulo="Transação realizada com sucesso" :detalhes=" $store.state.transacao" v-if="$store.state.transacao.status == 'sucesso'"></alert-component>
+              <alert-component tipo="danger" titulo="Erro na transação" :detalhes="$store.state.transacao" v-if="$store.state.transacao.status == 'erro'"></alert-component>
             </template>
 
             <template v-slot:conteudo v-if="$store.state.transacao.status != 'sucesso'">
@@ -228,7 +230,7 @@
                 <button type="button" class="btn btn-danger" @click="atualizar()">Atualizar</button>
              </template>
           </modal-component>
-        <!-- fim do modal de remoção de marca -->
+        <!-- fim do modal de atualização de marca -->
 
   </div>
 </template>
@@ -266,7 +268,7 @@ export default {
         formData.append('_method', 'patch');
         formData.append('nome', this.$store.state.item.nome);
 
-        if(this.arquivoImagem){
+        if(this.arquivoImagem[0]){
           formData.append('imagem', this.arquivoImagem[0]);
         }
 
@@ -283,16 +285,16 @@ export default {
 
         axios.post(url,formData,config)
           .then(response => {
-            console.log(response);
             atualizarImagem.value = '';
-/*             this.$store.state.transacao.status  = 'sucesso'
-            this.$store.state.transacao.mensagem  = response.data.msg*/
+            this.$store.state.transacao.status  = 'sucesso'
+            this.$store.state.transacao.mensagem  = 'Registro de marca atualizado com sucesso!'
             this.carregarLista(); 
           })
           .catch( errors => {
-            console.log(errors);
-/*             this.$store.state.transacao.status  = 'erro'
-            this.$store.state.transacao.mensagem  = errors.response.data.erro */
+            console.log({'erros':errors});
+            this.$store.state.transacao.status  = 'erro'
+            this.$store.state.transacao.mensagem  = errors.response.data.message
+            this.$store.state.transacao.dados  = errors.response.data.errors
           });
       },
       remover(){
@@ -323,7 +325,7 @@ export default {
             this.carregarLista();
           })
           .catch( errors => {
-            console.log(erro);
+            console.log(errors);
             this.$store.state.transacao.status  = 'erro'
             this.$store.state.transacao.mensagem  = errors.response.data.erro
           });
