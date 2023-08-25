@@ -59,7 +59,7 @@
               :dados="marcas.data" 
               :visualizar="{visivel: true, dataToggle: 'modal', dataTarget: '#modalMarcaVisualizar'}"
               :atualizar="true"
-              :remover="true"
+              :remover="{visivel: true, dataToggle: 'modal', dataTarget: '#modalMarcaRemover'}"
               :titulos="{
                 id: {titulo:'ID', tipo: 'texto'},
                 nome: {titulo:'Nome', tipo: 'texto'},
@@ -175,6 +175,28 @@
           </modal-component>
         <!-- fim do modal de visualização de marca -->
 
+        <!-- início do modal de remoção de marca -->
+          <modal-component id="modalMarcaRemover" titulo="Remover Marca">
+
+            <template v-slot:alertas></template>
+
+            <template v-slot:conteudo>
+              <input-container-component titulo="ID">
+                <input type="text" class="form-control" :value="$store.state.item.id" disabled>
+              </input-container-component>
+
+              <input-container-component titulo="Nome da marca">
+                <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
+              </input-container-component>
+            </template>
+
+             <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" @click="remover()">Remover</button>
+             </template>
+          </modal-component>
+        <!-- fim do modal de remoção de marca -->
+
   </div>
 </template>
 
@@ -206,7 +228,35 @@ export default {
         }
     },
     methods: {
-        pesquisar(){
+      remover(){
+        let confirmacao = confirm('Tem certeza que deseja remover esse registro?');
+
+        if(!confirmacao){
+          return false;
+        }
+
+        let formData = new FormData();
+        formData.append('_method', 'delete');
+
+        let config = {
+          headers: {
+            'Accept': 'application/json',
+            'Authorizathion': this.token
+          }
+        }
+
+        let url = this.urlBase + '/' + this.$store.state.item.id;
+
+
+        axios.get(url,formData,config)
+          .then(response => {
+            this.carregarLista();
+          })
+          .catch( errors => {
+          
+          });
+      },
+      pesquisar(){
           let filtro = '';
 
           for(let chave in this.busca){
