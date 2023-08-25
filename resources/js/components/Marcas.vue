@@ -58,7 +58,7 @@
             <table-component 
               :dados="marcas.data" 
               :visualizar="{visivel: true, dataToggle: 'modal', dataTarget: '#modalMarcaVisualizar'}"
-              :atualizar="true"
+              :atualizar="{visivel: true, dataToggle: 'modal', dataTarget: '#modalMarcaAtualizar'}"
               :remover="{visivel: true, dataToggle: 'modal', dataTarget: '#modalMarcaRemover'}"
               :titulos="{
                 id: {titulo:'ID', tipo: 'texto'},
@@ -200,6 +200,36 @@
           </modal-component>
         <!-- fim do modal de remoção de marca -->
 
+
+        <!-- início do modal de remoção de marca -->
+          <modal-component id="modalMarcaAtualizar" titulo="Atualizar Marca">
+
+            <template v-slot:alertas>
+            </template>
+
+            <template v-slot:conteudo v-if="$store.state.transacao.status != 'sucesso'">
+
+              <div class="form-group">
+                  <input-container-component titulo="Nome da Marca" id="atualizarNome" id-help="atualizarNomeHelp" texto-ajuda="Informe o nome da marca">
+                      <input type="text" class="form-control" id="atualizarNome" aria-describedby="atualizarNomeHelp" placeholder="Nome da Marca" v-model="nomeMarca"/>
+                  </input-container-component>
+              </div>
+              <div class="form-group">
+                  <input-container-component 
+                  titulo="Imagem" id="atualizarImagem" id-help="atualizarImagemHelp" texto-ajuda="Selecione uma imagem no formato PNG">
+                      <input type="file" class="form-control-file" id="atualizarImagem" aria-describedby="atualizarImagemHelp" placeholder="Selecione uma imagem no formato PNG" @change="carregarImagem($event)"/>
+                  </input-container-component>
+            </div>
+
+            </template>
+
+             <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-danger" @click="atualizar()">Atualizar</button>
+             </template>
+          </modal-component>
+        <!-- fim do modal de remoção de marca -->
+
   </div>
 </template>
 
@@ -231,6 +261,9 @@ export default {
         }
     },
     methods: {
+      atualizar(){
+        
+      },
       remover(){
         let confirmacao = confirm('Tem certeza que deseja remover esse registro?');
 
