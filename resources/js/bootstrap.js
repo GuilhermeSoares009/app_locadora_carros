@@ -43,7 +43,16 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // interceptar os requests da aplicação
 axios.interceptors.request.use(
     config => {
-        console.log('request')
+        config.headers.Accept = 'application/json'
+        
+        let token = document.cookie.split(';').find(indice => {
+            return indice.includes('token=');
+        })
+
+        token = token.split('=')[1];
+        token = 'Bearer ' + token;
+
+        config.headers.Authorization = token;
         return config;
     },
     error => {
